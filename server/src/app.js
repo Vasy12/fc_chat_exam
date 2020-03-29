@@ -1,3 +1,4 @@
+require('dotenv').config();
 const path = require('path');
 const { Server } = require('http');
 const express = require('express');
@@ -8,27 +9,25 @@ const server = new Server(app);
 const io = socketIO(server);
 const router = require('./router');
 const PORT = process.env.PORT || 3000;
-
+const handleError = require('./middleware/handleError.js');
 app.use(cors());
 app.use(express.json());
 /*
-* static files
-* */
+ * static files
+ * */
 app.use(express.static(path.join(__dirname, '../uploads')));
 /*
-* http routing
-* */
+ * http routing
+ * */
 app.use('/api', router);
 /*
-* error handler
-* */
-app.use((err, req, res, next) => {
-  res.status(500).send(err);
-});
+ * error handler
+ * */
+app.use(handleError);
 
 /*
-* WebSocket
-* */
+ * WebSocket
+ * */
 const chat = io.of('/chat').on('connection', function (socket) {
   chat.on('message', msg => {
 
@@ -38,8 +37,8 @@ const chat = io.of('/chat').on('connection', function (socket) {
   });
 });
 /*
-* start server
-* */
+ * start server
+ * */
 server.listen(PORT, () =>
   console.log(`Example app listening on port ${ PORT }!`),
 );

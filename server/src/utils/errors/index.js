@@ -1,6 +1,12 @@
 class UserError extends Error{
-  constructor (msg, status) {
-    super(msg);
+  constructor (message, status) {
+    super(message);
+    this.name = this.constructor.name;
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, this.constructor);
+    } else {
+      this.stack = ( new Error(message) ).stack;
+    }
     this._status = status;
   }
 
@@ -10,20 +16,29 @@ class UserError extends Error{
 
 }
 
-class BadRequestError extends UserError{
-  constructor (msg) {
-    super(msg || 'Bad request', 400);
+module.exports.BadRequestError = class extends UserError{
+  constructor (message) {
+    super(message || 'Bad request', 400);
   }
-}
-
-class NotFoundError extends UserError{
-  constructor (msg) {
-    super(msg || 'Resource not found', 404);
-  }
-}
-
-module.exports = {
-  UserError,
-  BadRequestError,
-  NotFoundError,
 };
+
+module.exports.NotFoundError = class extends UserError{
+  constructor (message) {
+    super(message || 'Resource not found', 404);
+  }
+};
+
+module.exports.ForbiddenError = class extends UserError{
+  constructor (message) {
+    super(message ||
+      'The server understood the request, but is refusing to fulfill it.', 403);
+  }
+};
+
+module.exports.UnauthorizedError = class extends UserError{
+  constructor (message) {
+    super(message || 'The request requires user authentication.', 401);
+  }
+};
+module.exports.UserError = UserError;
+

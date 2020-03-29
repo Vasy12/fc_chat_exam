@@ -9,7 +9,7 @@ const userRef = {
 
 const messageSchema = new Schema({
   authorId: {
-    type: Schema.Types.ObjectId,
+    ...userRef,
     required: true,
   },
   body: {
@@ -34,7 +34,12 @@ const chatSchema = new Schema({
     required: true,
   },
   users: [
-    userRef,
+    {
+      ...userRef,
+      index: {
+        unique: true,
+      },
+    },
   ],
   messages: [messageSchema],
   createdAt: Schema.Types.Date,

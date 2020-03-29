@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-const { PROFILE_PICTURE_PATH } = require('../constants');
+const { PROFILE_PICTURE_PATH, LOGIN_PATTERN } = require('../constants');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
@@ -9,7 +9,7 @@ const userSchema = new Schema({
     type: Schema.Types.String,
     required: true,
     unique: true,
-    match: /^\w{6,16}$/,
+    match: LOGIN_PATTERN,
   },
   password: {
     type: Schema.Types.String,
