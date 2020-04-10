@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { createLoginRequestAction } from '../../../actions';
-import Input from '../Input';
+import { loginUserAction } from '../../../actions';
 import { Field, Formik, Form } from 'formik';
 
 let LoginForm = props => {
@@ -32,7 +31,7 @@ let LoginForm = props => {
 };
 
 const mapDispatchToProps = dispatch => ( {
-  login: (data) => dispatch(createLoginRequestAction(data)),
+  login: (data) => dispatch(loginUserAction(data)),
 } );
 
 export default connect(null, mapDispatchToProps)(LoginForm);

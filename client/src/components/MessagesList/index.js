@@ -1,21 +1,23 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import MessageItem, {messagePropType} from '../MessageItem';
 
-const MessagesList = (props) => {
+const MessagesList = props => {
+  const {currentChat} = props;
 
   return (
     <ul>
       {
-        props.currentChatId ? ( null ) : ( <li>Select chat</li> )
+        currentChat.messages.map(
+          msg => <MessageItem key={msg.createdAt} {...msg}/>)
       }
     </ul>
   );
 };
 
-const mapStateToProps = state => {
-
-  return state.chats;
-
+MessagesList.propTypes = {
+  messages: PropTypes.arrayOf(PropTypes.shape(messagePropType)),
 };
 
-export default connect()(MessagesList);
+export default MessagesList;

@@ -1,0 +1,15 @@
+.container {
+
+}
+
+.link {
+  box-sizing: border-box;
+  padding: 4px;
+  border: 1px solid blue;
+  display: inline-block;
+
+}
+
+.activeLink {
+  border: 2px solid red;
+}

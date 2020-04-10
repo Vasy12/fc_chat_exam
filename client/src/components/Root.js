@@ -8,7 +8,7 @@ import history from '../history';
 const Root = ({ store }) => (
   <Provider store={ store }>
     <Router history={ history }>
-      <Route path="/:filter?" component={ App }/>
+      <Route path="/" component={ App }/>
     </Router>
   </Provider>
 );

@@ -22,7 +22,7 @@ module.exports.decodeBasicToken = basicToken => Buffer.from(basicToken,
  * @param {string} expiresIn
  * @returns {Promise<string>}
  */
-module.exports.signJWT = (payload, expiresIn = '1h') => signAsync(payload,
+module.exports.signJWT = (payload, expiresIn = '3h') => signAsync(payload,
   TOKEN_SECRET, {
     expiresIn,
   });

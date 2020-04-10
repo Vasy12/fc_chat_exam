@@ -1,6 +1,6 @@
 require('dotenv').config();
 const path = require('path');
-const { Server } = require('http');
+const {Server} = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
 const cors = require('cors');
@@ -10,6 +10,8 @@ const io = socketIO(server);
 const router = require('./router');
 const PORT = process.env.PORT || 3000;
 const handleError = require('./middleware/handleError.js');
+const EVENT_TYPES = require('./constants/eventTypes.js');
+const {User, Chat} = require('./models');
 app.use(cors());
 app.use(express.json());
 /*
@@ -28,11 +30,23 @@ app.use(handleError);
 /*
  * WebSocket
  * */
-const chat = io.of('/chat').on('connection', function (socket) {
-  chat.on('message', msg => {
+const chatIO = io.of('/chat').on('connection', function (socket) {
+  socket.on('message', msg => {
 
   });
-  chat.on('disconnect', reason => {
+  socket.on(EVENT_TYPES.CREATE_CHAT_EVENT, async (userId, data) => {
+
+    const chat = await Chat.create({
+                                     ...data,
+                                     owner: userId,
+                                   });
+
+    if (chat) {
+      chatIO.emit(EVENT_TYPES.NEW_CHAT_EVENT, chat);
+    }
+
+  });
+  socket.on('disconnect', reason => {
 
   });
 });
@@ -40,7 +54,7 @@ const chat = io.of('/chat').on('connection', function (socket) {
  * start server
  * */
 server.listen(PORT, () =>
-  console.log(`Example app listening on port ${ PORT }!`),
+  console.log(`Example app listening on port ${PORT}!`),
 );
 
 

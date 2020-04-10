@@ -1,41 +1,26 @@
 import React from 'react';
-import { Formik, Form, Field } from 'formik';
-import { createSignUpRequestAction } from '../../../actions';
-import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import {Formik, Form, Field} from 'formik';
 
 const SignUpForm = props => {
 
-  const handleSubmit = (values) => {
-    const formData = new FormData();
-
-    Object.keys(values).forEach(key => {
-      console.log(values[ key ]);
-      formData.append(key, values[ key ]);
-    });
-    props.signUp(formData);
-  };
-
   return (
-    <Formik onSubmit={ handleSubmit } initialValues={ {
-      login: '',
-      password: '',
-      profilePicture: '',
-    } }>
+    <Formik {...props}>
       {
-        ({ setFieldValue, ...rest }) => (
+        ({setFieldValue, ...rest}) => (
           <Form encType="multipart/form-data">
             <Field type="text" name="login" placeholder="Login"/>
             <br/>
             <Field type="password" name="password" placeholder="Password"/>
             <br/>
-            <input name={ 'profilePicture' } type="file" multiple={ false }
-                   onChange={ (event) => {
+            <input name={'profilePicture'} type="file" multiple={false}
+                   onChange={(event) => {
 
                      setFieldValue('profilePicture',
-                       event.currentTarget.files[ 0 ]);
-                   } }/>
+                                   event.currentTarget.files[0]);
+                   }}/>
             <br/>
-            <button type={ 'submit' }>Sign Up</button>
+            <button type={'submit'}>Sign Up</button>
           </Form>
         )
       }
@@ -43,9 +28,25 @@ const SignUpForm = props => {
   );
 };
 
-const mapStateToProps = state => ( {} );
+SignUpForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  initialValues: PropTypes.shape({
+                                   login: PropTypes.string.isRequired,
+                                   password: PropTypes.string.isRequired,
+                                   profilePicture: PropTypes.oneOfType([
+                                                                         PropTypes.instanceOf(
+                                                                           File),
+                                                                         PropTypes.string,
+                                                                       ]),
+                                 }).isRequired,
+};
 
-const mapDispatchToProps = dispatch => ( {
-  signUp: (data) => dispatch(createSignUpRequestAction(data)),
-} );
-export default connect(mapStateToProps, mapDispatchToProps)(SignUpForm);
+SignUpForm.defaultProps = {
+  initialValues: {
+    login: '',
+    password: '',
+    profilePicture: '',
+  },
+};
+
+export default SignUpForm;

@@ -1,0 +1,17 @@
+{
+  "development": {
+    "host": "localhost",
+    "port": 27017,
+    "db": "db_dev_chat"
+  },
+  "test": {
+    "host": "localhost",
+    "port": 27017,
+    "db": "chat_db_test"
+  },
+  "production": {
+    "host": "localhost",
+    "port": 27017,
+    "db": "chat_db"
+  }
+}
